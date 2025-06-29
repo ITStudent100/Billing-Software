@@ -1,38 +1,417 @@
+/* App.css */
+
+body {
+  margin: 0;
+  font-family: 'Courier New', monospace;
+  color: white;
+  background: linear-gradient(-45deg, #2c003e, #3d0033, #240046, #3c004a);
+  background-size: 400% 400%;
+  animation: gradientBG 10s ease infinite;
+}
+
+@keyframes gradientBG {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
 .App {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+/* Screens */
+.login-screen {
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+}
+.screen {
+  padding: 20px;
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.login-box {
+  max-width: 400px;
+  margin: 80px auto;
+  padding: 30px;
+  background-color: #111;
+  border-radius: 10px;
+  box-shadow: 0 0 20px #ED2100;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.login-box input {
+  width: 80%;
+  padding: 10px;
+  margin: 15px 0;
+  font-size: 1rem;
+  border: none;
+  border-radius: 5px;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.login-box button {
+  width: 60%;
+  margin: 5px;
+}
+
+.login-footer {
+  margin-top: 40px;
+  font-size: 0.85rem;
+  color: #E88A38;
+}
+
+/* Buttons */
+.screen button,
+.billing button,
+.sidebar button {
+  background: linear-gradient(145deg, #ED2100, #BF00AC);
+  border: none;
+  color: white;
+  padding: 10px 20px;
+  font-size: 1rem;
+  margin: 10px;
+  cursor: pointer;
+  border-radius: 10px;
+  box-shadow: 0 0 10px #E88A38;
+  transition: transform 0.1s ease;
+}
+
+.screen button:hover,
+.billing button:hover,
+.sidebar button:hover {
+  box-shadow: 0 0 20px #E88A38;
+  transform: scale(1.05);
+}
+
+/* Billing Layout */
+.billing {
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* Left Sidebar */
+.sidebar {
+  width: 20%;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  border-right: 2px solid #ED2100;
+}
+
+/* Center Menu */
+.items {
+  width: 55%;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 15px;
+  padding: 15px;
+  justify-items: center;
+  align-items: stretch;
+  box-sizing: border-box;
+}
+
+.items .item-box {
+  border: 2px solid #0f0;
+  padding: 8px;
+  border-radius: 6px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 160px; /* Ensure equal height for clean rows */
+}
+
+.items button {
+  min-height: 100px;
+  width: 100%;
+  font-size: 0.95rem;
+  font-weight: bold;
+  white-space: pre-line;
+  text-align: center;
+  border-radius: 10px;
+  padding: 10px;
+  background: linear-gradient(135deg, #E88A38, #960016);
+  box-shadow: 0 0 10px #BF00AC;
+}
+
+.items button:hover {
+  box-shadow: 0 0 20px #BF00AC;
+}
+
+/* Cart on Right */
+.cart {
+  width: 25%;
+  background: #111;
+  padding: 10px;
+  border-left: 2px solid #ED2100;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+.cart h3 {
+  color: #E88A38;
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+
+.cart div {
+  margin: 5px 0;
+  font-weight: bold;
+}
+
+.cart button {
+  margin: 5px 5px 5px 0;
+  background-color: #BF00AC;
+  font-size: 0.9rem;
+  padding: 5px 10px;
+}
+
+.total {
+  margin-top: 20px;
+  font-size: 1.2rem;
+  color: #BF00AC;
+  font-weight: bold;
+  border-top: 1px dashed #E88A38;
+  padding-top: 10px;
+}
+
+/* Header */
+.header {
+  background-color: #111;
+  padding: 10px;
+  border-bottom: 2px solid #ED2100;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header button {
+  background-color: #ED2100;
+  margin-left: 10px;
+  padding: 6px 14px;
+  font-size: 0.9rem;
+  border-radius: 6px;
+  box-shadow: 0 0 5px #BF00AC;
+}
+
+/* Settings Container */
+.settings-container {
+  background: #111;
+  color: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px #E88A38;
+  width: 400px;
+  margin: auto;
+}
+
+.settings-tabs {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.settings-tabs button {
+  margin: 0 10px;
+  padding: 10px 20px;
+  background-color: #960016;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.tab-buttons {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.tab-buttons button {
+  margin: 0 10px;
+  padding: 8px 20px;
+  font-weight: bold;
+}
+
+.tab-buttons .active {
+  background-color: #BF00AC;
+  box-shadow: 0 0 10px #ED2100;
+}
+
+.tab-content {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+  margin-top: 15px;
+}
+
+.tab-content label {
+  display: block;
+  margin: 10px 0 5px;
+}
+
+.tab-content input {
+  width: 100%;
+  padding: 8px;
+  border-radius: 5px;
+  border: none;
+}
+
+.tab-content input,
+.tab-content select {
+  margin: 10px;
+  padding: 8px;
+  width: 60%;
+  font-size: 1rem;
+  border-radius: 5px;
+}
+
+.settings-content input,
+.settings-content select {
+  display: block;
+  margin: 10px auto;
+  padding: 10px;
+  width: 80%;
+  border-radius: 5px;
+}
+
+.settings-panel {
+  background-color: #111;
+  border: 2px solid #ED2100;
+  border-radius: 10px;
+  padding: 20px;
+  width: 450px;
+  margin: auto;
+  font-family: 'Courier New', monospace;
+  color: #E88A38;
+}
+
+.settings-title {
+  font-size: 24px;
+  margin-bottom: 10px;
+  color: #BF00AC;
+}
+
+.settings-section {
+  margin-bottom: 20px;
+}
+
+.settings-panel label {
+  display: block;
+  margin-top: 10px;
+  font-weight: bold;
+  color: #FFCC00;
+}
+
+.settings-panel input,
+.settings-panel select {
+  width: 100%;
+  padding: 8px;
+  margin-top: 4px;
+  background: #222;
   color: white;
+  border: 1px solid #960016;
+  border-radius: 5px;
 }
 
-.App-link {
-  color: #61dafb;
+.settings-close {
+  background: linear-gradient(to right, #ED2100, #BF00AC);
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  font-weight: bold;
+  border-radius: 5px;
+  cursor: pointer;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
+/* Main Menu */
+.main-menu {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 40px;
+  padding: 60px;
+  max-width: 600px;
+  margin: auto;
+  justify-items: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #111;
+}
+
+.main-menu button {
+  width: 200px;
+  height: 200px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  border-radius: 20px;
+  text-transform: uppercase;
+  background: linear-gradient(135deg, #ED2100, #BF00AC);
+  color: white;
+  box-shadow: 0 0 15px #E88A38;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  line-height: 1.5;
+}
+
+.main-menu button:hover {
+  transform: scale(1.08);
+  box-shadow: 0 0 25px #BF00AC;
+}
+
+/* Particles Background */
+.particles {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  overflow: hidden;
+  z-index: -1; /* This line moves it behind everything */
+  pointer-events: none; /* This allows clicks to pass through */
+}
+
+.particles span {
+  position: absolute;
+  display: block;
+  width: 8px;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  animation: float 12s linear infinite;
+  border-radius: 50%;
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(100vh) scale(0.5);
+    opacity: 0;
   }
-  to {
-    transform: rotate(360deg);
+  50% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-10vh) scale(1);
+    opacity: 0;
   }
 }
+
+.fade-in {
+  animation: fadeIn 1.2s ease-in forwards;
+  opacity: 0;
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
