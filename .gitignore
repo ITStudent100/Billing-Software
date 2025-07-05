@@ -1,17 +1,4 @@
-# macOS
+node_modules/
+dist/
 .DS_Store
-
-# Build output
-/dist
-
-# Logs
 *.log
-
-# Electron output
-*.dmg
-*.exe
-*.zip
-
-# npm debug
-npm-debug.log*
-node_modules
