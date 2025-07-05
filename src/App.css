@@ -1,12 +1,11 @@
-/* App.css */
-
 body {
   margin: 0;
-  font-family: 'Courier New', monospace;
+  font-family: 'Poppins', monospace;
+  background-image: url('./assets/login.jpg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
   color: white;
-  background: linear-gradient(-45deg, #2c003e, #3d0033, #240046, #3c004a);
-  background-size: 400% 400%;
-  animation: gradientBG 10s ease infinite;
 }
 
 @keyframes gradientBG {
@@ -21,7 +20,6 @@ body {
   height: 100vh;
 }
 
-/* Screens */
 .login-screen {
   background-size: cover;
   background-position: center;
@@ -29,42 +27,126 @@ body {
   min-height: 100vh;
   display: flex;
   justify-content: center;
+  align-items: center;
 }
+
+.login-box {
+  max-width: 400px;
+  padding: 30px;
+  border-radius: 16px;
+  backdrop-filter: blur(12px);
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 0 25px rgba(237, 33, 0, 0.3), 0 0 60px rgba(191, 0, 172, 0.2);
+  text-align: center;
+  animation: fadeIn 1.2s ease-in-out;
+}
+
+.login-box input {
+  width: 90%;
+  padding: 12px;
+  margin: 15px 0;
+  font-size: 1rem;
+  border: none;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.15);
+  color: white;
+  outline: none;
+  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.3);
+}
+
+.login-box input::placeholder {
+  color: #f0c4ff;
+  letter-spacing: 0.5px;
+}
+
+.button-row {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 10px;
+}
+
+.button-row button {
+  width: 45%;
+  margin: 10px 0;
+  padding: 10px 16px;
+  font-size: 1rem;
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #ED2100, #BF00AC);
+  color: white;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.3s;
+  box-shadow: 0 0 10px #BF00AC;
+  animation: pulseGlow 2s infinite;
+  font-family: 'Poppins', sans-serif;
+}
+
+.button-row button:hover {
+  transform: scale(1.08);
+  box-shadow: 0 0 20px #ED2100;
+}
+
+.login-footer {
+  margin-top: 20px;
+  font-size: 0.9rem;
+  color: #ffc2e6;
+  text-shadow: 1px 1px #000;
+}
+
+.particles {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  overflow: hidden;
+  z-index: -1;
+  pointer-events: none;
+}
+
+.particles span {
+  position: absolute;
+  display: block;
+  width: 8px;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  animation: float 12s linear infinite;
+  border-radius: 50%;
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(100vh) scale(0.5);
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-10vh) scale(1);
+    opacity: 0;
+  }
+}
+
+@keyframes pulseGlow {
+  0% { box-shadow: 0 0 10px #ED2100; }
+  50% { box-shadow: 0 0 20px #BF00AC; }
+  100% { box-shadow: 0 0 10px #ED2100; }
+}
+
+@keyframes fadeIn {
+  0% { opacity: 0; transform: translateY(20px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
 .screen {
   padding: 20px;
   text-align: center;
 }
 
-.login-box {
-  max-width: 400px;
-  margin: 80px auto;
-  padding: 30px;
-  background-color: #111;
-  border-radius: 10px;
-  box-shadow: 0 0 20px #ED2100;
-}
-
-.login-box input {
-  width: 80%;
-  padding: 10px;
-  margin: 15px 0;
-  font-size: 1rem;
-  border: none;
-  border-radius: 5px;
-}
-
-.login-box button {
-  width: 60%;
-  margin: 5px;
-}
-
-.login-footer {
-  margin-top: 40px;
-  font-size: 0.85rem;
-  color: #E88A38;
-}
-
-/* Buttons */
 .screen button,
 .billing button,
 .sidebar button {
@@ -78,6 +160,7 @@ body {
   border-radius: 10px;
   box-shadow: 0 0 10px #E88A38;
   transition: transform 0.1s ease;
+  font-family: 'Poppins', sans-serif;
 }
 
 .screen button:hover,
@@ -87,14 +170,12 @@ body {
   transform: scale(1.05);
 }
 
-/* Billing Layout */
 .billing {
   display: flex;
   height: 100vh;
   overflow: hidden;
 }
 
-/* Left Sidebar */
 .sidebar {
   width: 20%;
   padding: 10px;
@@ -104,83 +185,145 @@ body {
   border-right: 2px solid #ED2100;
 }
 
-/* Center Menu */
 .items {
   width: 55%;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
   gap: 15px;
-  padding: 15px;
-  justify-items: center;
-  align-items: stretch;
+  padding: 20px;
+  justify-content: center;
+  align-items: start;
   box-sizing: border-box;
 }
 
-.items .item-box {
-  border: 2px solid #0f0;
-  padding: 8px;
-  border-radius: 6px;
+.items button {
+  height: 120px;
+  background: rgba(255, 255, 255, 0.85);
+  border-radius: 12px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+  font-weight: bold;
+  color: black;
+  text-align: center;
+  padding: 10px;
+  font-family: 'Courier New', monospace;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  min-height: 160px; /* Ensure equal height for clean rows */
-}
-
-.items button {
-  min-height: 100px;
-  width: 100%;
-  font-size: 0.95rem;
-  font-weight: bold;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 0 8px rgba(0,0,0,0.15);
+  transition: all 0.2s ease;
   white-space: pre-line;
-  text-align: center;
-  border-radius: 10px;
-  padding: 10px;
-  background: linear-gradient(135deg, #E88A38, #960016);
-  box-shadow: 0 0 10px #BF00AC;
 }
 
 .items button:hover {
-  box-shadow: 0 0 20px #BF00AC;
+  transform: scale(1.05);
+  box-shadow: 0 0 12px #E88A38;
 }
 
-/* Cart on Right */
+/* ✅ Updated Cart */
 .cart {
   width: 25%;
-  background: #111;
-  padding: 10px;
-  border-left: 2px solid #ED2100;
+  background: black;
+  color: white;
+  padding: 20px;
+  border-radius: 8px;
+  font-family: monospace;
+  overflow-y: auto;
+  max-height: 100vh;
   display: flex;
   flex-direction: column;
-  overflow-y: auto;
+  box-sizing: border-box;
 }
+
 
 .cart h3 {
-  color: #E88A38;
+  text-align: center;
   margin-bottom: 10px;
+  color: #FF4081;
+}
+
+.cart-header {
+  display: flex;
+  font-weight: bold;
+  border-bottom: 2px solid #ff4081;
+  padding-bottom: 6px;
+}
+
+.cart-row {
+  display: flex;
+  align-items: center;
+  padding: 6px 0;
+  border-bottom: 1px solid #333;
+  flex-wrap: wrap;
+}
+
+.item-col {
+  flex: 2;
+  text-align: left;
+  font-size: 14px;
+  padding-right: 6px;
+}
+
+.qty-col {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+
+.qty-controls button {
+  background-color: #ED2100;
+  color: white;
+  border: none;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.qty-controls span {
+  min-width: 20px;
+  display: inline-block;
+  text-align: center;
+}
+
+.price-col {
+  flex: 1;
+  text-align: right;
+  font-size: 14px;
   font-weight: bold;
 }
 
-.cart div {
-  margin: 5px 0;
+.cart-total {
   font-weight: bold;
+  color: #FFEB3B !important;
+  font-size: 20px;
+  margin-top: 12px;
 }
-
 .cart button {
-  margin: 5px 5px 5px 0;
-  background-color: #BF00AC;
-  font-size: 0.9rem;
-  padding: 5px 10px;
+  margin-top: 10px;
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  background: linear-gradient(90deg, #ED2100, #BF00AC);
+  border: none;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
 }
 
-.total {
-  margin-top: 20px;
-  font-size: 1.2rem;
-  color: #BF00AC;
-  font-weight: bold;
-  border-top: 1px dashed #E88A38;
-  padding-top: 10px;
+.cart button:hover {
+  background: linear-gradient(90deg, #BF00AC, #ED2100);
+  box-shadow: 0 0 10px #ED2100;
 }
 
+/* Settings, Admin, Popup, Header styling continues... */
+/* (same as your current code, unchanged) */
+/* Coing: 10px;
+  font-size: 16px;
+  backgrontinue your existing styles for settings, summary, etc. below... */
 /* Header */
 .header {
   background-color: #111;
@@ -331,6 +474,7 @@ body {
 }
 
 /* Main Menu */
+/* FULLSCREEN MAIN MENU */
 .main-menu {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -341,9 +485,11 @@ body {
   justify-items: center;
   align-items: center;
   height: 100vh;
-  background-color: #111;
+  background-color: transparent; /* removes black background */
+  backdrop-filter: none; /* no blur */
 }
 
+/* GLOWING, SEMI-TRANSPARENT BUTTONS */
 .main-menu button {
   width: 200px;
   height: 200px;
@@ -351,16 +497,19 @@ body {
   font-weight: bold;
   border-radius: 20px;
   text-transform: uppercase;
-  background: linear-gradient(135deg, #ED2100, #BF00AC);
   color: white;
-  box-shadow: 0 0 15px #E88A38;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  line-height: 1.5;
+  background: rgba(255, 255, 255, 0.05); /* translucent button */
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 0 15px rgba(255, 100, 200, 0.4);
+  transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+  backdrop-filter: blur(8px);
 }
 
+/* On hover – make glow brighter and button more vibrant */
 .main-menu button:hover {
-  transform: scale(1.08);
-  box-shadow: 0 0 25px #BF00AC;
+  background: rgba(255, 255, 255, 0.12);
+  transform: scale(1.05);
+  box-shadow: 0 0 25px #FF0099, 0 0 40px #ED2100;
 }
 
 /* Particles Background */
@@ -415,3 +564,73 @@ body {
   }
 }
 
+/* Admin Password Popup Overlay */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.75);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+/* Admin Password Prompt Box */
+.popup-box {
+  background: rgba(0, 0, 0, 0.8);
+  border: 2px solid #ED2100;
+  padding: 30px 40px;
+  border-radius: 16px;
+  box-shadow: 0 0 30px #BF00AC;
+  text-align: center;
+  animation: fadeIn 0.4s ease;
+  color: white;
+  font-family: 'Poppins', sans-serif;
+  max-width: 400px;
+  width: 90%;
+}
+
+.popup-box input {
+  width: 100%;
+  padding: 12px;
+  margin: 20px 0;
+  font-size: 1rem;
+  border: none;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  outline: none;
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.4);
+}
+
+.popup-box input::placeholder {
+  color: #f4b8ff;
+}
+
+.popup-box .button-row {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+}
+
+.popup-box .button-row button {
+  width: 100px;
+  padding: 10px 0;
+  font-size: 1rem;
+  font-weight: bold;
+  border: none;
+  border-radius: 6px;
+  background: linear-gradient(to right, #ED2100, #BF00AC);
+  color: white;
+  cursor: pointer;
+  box-shadow: 0 0 10px #E88A38;
+  transition: all 0.3s ease;
+}
+
+.popup-box .button-row button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 20px #ED2100;
+}

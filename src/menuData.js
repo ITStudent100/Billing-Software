@@ -134,5 +134,12 @@ export const menuData = [
       { name: "French Fries (Full)", price: 80 },
       { name: "Panipuri (6 pieces)", price: 80 }
     ]
+  },
+   {
+    category: "Beverages",
+    items: [
+      { name: "Tea", price: 15},
+      { name: "Coffee", price: 20},
+    ]
   }
 ];

@@ -8,25 +8,23 @@ function createWindow() {
     height: 800,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
-      contextIsolation: true
+      contextIsolation: true,
+      nodeIntegration: false,
     },
     autoHideMenuBar: true
   });
-  win.loadURL('http://localhost:3000');
+
+  win.loadFile(path.join(__dirname, 'build', 'index.html'));
 }
 
-ipcMain.handle('print', (_, content) => {
-  const win = new BrowserWindow({ show: false });
-  win.loadURL(`data:text/html,<pre style="font-family:'Courier New';">${encodeURIComponent(content)}</pre>`);
-  win.webContents.on('did-finish-load', () => {
-    win.webContents.print({ silent: true, printBackground: false });
-  });
-});
-
+// Sales storage handlers
 ipcMain.handle('read-sales', (_, file) => {
   const f = path.join(app.getPath('userData'), file);
-  try { return JSON.parse(fs.readFileSync(f, 'utf8')); }
-  catch { return []; }
+  try {
+    return JSON.parse(fs.readFileSync(f, 'utf8'));
+  } catch {
+    return [];
+  }
 });
 
 ipcMain.handle('write-sales', (_, file, data) => {
@@ -34,87 +32,114 @@ ipcMain.handle('write-sales', (_, file, data) => {
   fs.writeFileSync(f, JSON.stringify(data, null, 2));
 });
 
-// Make sure this is after app is ready
-const getSettingsFile = () => path.join(app.getPath('userData'), 'printer-settings.json');
-
-ipcMain.handle('get-printers', async () => {
-  const printers = BrowserWindow.getFocusedWindow().webContents.getPrinters();
-  return printers;
-});
-
-ipcMain.on('save-printer-settings', (event, data) => {
-  const settingsFile = getSettingsFile();
-  fs.writeFileSync(settingsFile, JSON.stringify(data));
-});
-
-ipcMain.handle('load-printer-settings', async () => {
-  const settingsFile = getSettingsFile();
-  if (fs.existsSync(settingsFile)) {
-    const raw = fs.readFileSync(settingsFile);
-    return JSON.parse(raw);
-  }
-  return null;
-});
-
-ipcMain.on('print-shift-summary', (event, sales) => {
-  const total = sales.reduce((sum, o) => sum + o.total, 0);
-  const text = `
-SHIFT CLOSE SUMMARY
-Date: ${new Date().toLocaleDateString()}
-Orders: ${sales.length}
-Total: ₹${total}
-******** END ********
-  `;
-
-  const win = new BrowserWindow({ show: false });
-  win.loadURL(`data:text/plain;charset=utf-8,${encodeURIComponent(text)}`);
-  win.webContents.on('did-finish-load', () => {
-    win.webContents.print({ silent: true }, () => win.close());
-  });
-});
-
-app.whenReady().then(createWindow);
-
-ipcMain.on('print-shift-summary', (event, sales, shopName, cashierName) => {
-  const total = sales.reduce((sum, o) => sum + o.total, 0);
-  const html = `
-    <h1>SHIFT CLOSE SUMMARY</h1>
-    <p><strong>Date:</strong> ${new Date().toLocaleDateString()}</p>
-    <p><strong>Shop:</strong> ${shopName}</p>
-    <p><strong>Cashier:</strong> ${cashierName}</p>
-    <p><strong>Orders:</strong> ${sales.length}</p>
-    <p><strong>Total:</strong> ₹${total}</p>
-    <pre>******** END ********</pre>
-  `;
-
-  const win = new BrowserWindow({ show: false });
-  win.loadURL(`data:text/html;charset=utf-8,${encodeURIComponent(html)}`);
-  win.webContents.on('did-finish-load', () => {
-    win.webContents.print({ silent: true }, () => win.close());
-  });
-});
-
-ipcMain.on('print-to-printer', (event, printerName, content) => {
-  const focusedWindow = BrowserWindow.getFocusedWindow();
-  // Create a hidden window to print the content
+// Print to selected printer
+ipcMain.on('print-to-printer', (event, { printerName, data }) => {
   const printWin = new BrowserWindow({ show: false });
-  printWin.loadURL(`data:text/plain;charset=utf-8,${encodeURIComponent(content)}`);
+  printWin.loadURL(`data:text/plain;charset=utf-8,${encodeURIComponent(data)}`);
   printWin.webContents.on('did-finish-load', () => {
     printWin.webContents.print({
       silent: true,
       printBackground: false,
-      deviceName: printerName,
+      deviceName: printerName || undefined,
     }, (success, failureReason) => {
-      if (!success) console.log('Print failed: ' + failureReason);
+      if (!success) {
+        console.log('Print failed:', failureReason);
+      }
       printWin.close();
     });
   });
 });
 
-// React component code (to be used in your renderer process)
-<div className="main-menu fade-in">
-  <button onClick={openDay}>🟢<br />Open Day</button>
-  <button onClick={printSummary}>🧾<br />Summary</button>
-  <button onClick={() => setView('settings')}>🛠<br />Settings</button>
-  <button onClick={closeDay}>🔴<br />Close Day</button>
-</div>
+// Printer Test Page
+ipcMain.on('test-printer', (event, printerName) => {
+  const testContent = [
+    '*** TEST PRINT PAGE ***',
+    'Printer: ' + printerName,
+    'Date: ' + new Date().toLocaleString(),
+    '',
+    'This is a test print from Lassi Day billing software.',
+    '',
+    '********** END **********'
+  ].join('\n');
+
+  const testWin = new BrowserWindow({ show: false });
+  testWin.loadURL(`data:text/plain;charset=utf-8,${encodeURIComponent(testContent)}`);
+  testWin.webContents.on('did-finish-load', () => {
+    testWin.webContents.print({
+      silent: true,
+      printBackground: false,
+      deviceName: printerName || undefined,
+    }, (success, error) => {
+      if (!success) console.log('Test Print Failed:', error);
+      testWin.close();
+    });
+  });
+});
+
+// Shift summary print (opens preview and waits for user action)
+ipcMain.handle('preview-shift-summary', (event, sales, shopName, cashierName) => {
+  const total = sales.reduce((sum, o) => sum + o.total, 0);
+  const html = `
+    <html>
+      <head>
+        <style>
+          body { font-family: 'Courier New'; padding: 20px; }
+          h1 { text-align: center; }
+          .summary-line { margin: 5px 0; }
+          .footer { margin-top: 20px; text-align: center; }
+          button { margin: 10px; padding: 10px 20px; font-size: 16px; }
+        </style>
+      </head>
+      <body>
+        <h1>SHIFT CLOSE SUMMARY</h1>
+        <div class="summary-line"><strong>Date:</strong> ${new Date().toLocaleString()}</div>
+        <div class="summary-line"><strong>Shop:</strong> ${shopName}</div>
+        <div class="summary-line"><strong>Cashier:</strong> ${cashierName}</div>
+        <div class="summary-line"><strong>Total Orders:</strong> ${sales.length}</div>
+        <div class="summary-line"><strong>Total:</strong> ₹${total}</div>
+        <div class="footer">
+          <hr />
+          <p>******** END OF REPORT ********</p>
+          <button onclick="window.print()">🖨️ Print</button>
+          <button onclick="window.close()">❌ Cancel</button>
+        </div>
+      </body>
+    </html>
+  `;
+
+  const previewWin = new BrowserWindow({
+    width: 500,
+    height: 600,
+    show: true,
+    title: "Print Summary Preview",
+  });
+
+  previewWin.loadURL(`data:text/html;charset=utf-8,${encodeURIComponent(html)}`);
+});
+
+// Printer settings
+const getSettingsFile = () => path.join(app.getPath('userData'), 'printer-settings.json');
+
+ipcMain.handle('get-printers', async () => {
+  const win = BrowserWindow.getFocusedWindow();
+  return win ? await win.webContents.getPrintersAsync() : [];
+});
+
+ipcMain.on('save-printer-settings', (event, data) => {
+  fs.writeFileSync(getSettingsFile(), JSON.stringify(data));
+});
+
+ipcMain.handle('load-printer-settings', async () => {
+  const file = getSettingsFile();
+  if (fs.existsSync(file)) {
+    return JSON.parse(fs.readFileSync(file, 'utf8'));
+  }
+  return null;
+});
+
+ipcMain.handle('check-closed', async (_, filename) => {
+  const filePath = path.join(app.getPath('userData'), filename);
+  return fs.existsSync(filePath);
+});
+
+app.whenReady().then(createWindow);
