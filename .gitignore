@@ -1,4 +1,17 @@
+# Dependencies
 node_modules/
+
+# Build output
 dist/
+build/
+
+# macOS
 .DS_Store
+
+# Logs
 *.log
+
+# Electron Output Files
+*.dmg
+*.zip
+*.asar
